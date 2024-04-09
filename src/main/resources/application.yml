@@ -1,0 +1,47 @@
+spring:
+  application:
+    name:Photogram
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://sorune.asuscomm.com:13917/Photogram
+    username: root
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: 'true'
+  thymeleaf:
+    check-template-location: true
+    prefix: classpath:/templates/   # .html 파일을 불러오기 위한 경로 설정(src/main/resources/templates)
+    suffix: .html   # 파일 확장자
+    cache: false
+  servlet:
+    multipart:
+      enabled: true
+      location: classpath:static/files
+      max-request-size: 300MB
+      max-file-size: 50MB
+jwt:
+  header: Authorization
+  # HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용
+  # echo 'jsh-springboot-and-jwt-tutorial-this-is-for-generating-jwt-secretkey-base64'|base6
+  accessTokenValidationTime: 1800000 # 30 minutes in milliseconds
+  refreshTokenValidationTime: 604800000 # 7 days in milliseconds
+
+jasypt:
+  encryptor:
+    password: helloSpringBoot
+    bean: jasyptStringEncryptor
+
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          web: trace
+    com:
+      sorune: debug
