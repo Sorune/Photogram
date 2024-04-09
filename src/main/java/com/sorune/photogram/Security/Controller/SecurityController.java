@@ -1,7 +1,6 @@
 package com.sorune.photogram.Security.Controller;
 
 import com.sorune.photogram.Security.Entity.User;
-import com.sorune.photogram.Security.Repository.UserRepository;
 import com.sorune.photogram.Security.Service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;

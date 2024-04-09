@@ -63,6 +63,10 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
+	//메타데이터 처리용
+	// https://mvnrepository.com/artifact/com.drewnoakes/metadata-extractor
+	implementation group: 'com.drewnoakes', name: 'metadata-extractor', version: '2.19.0'
+
 	// 날짜 처리관련 코드 추가
 	// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-java8time
 	implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-java8time', version: '3.0.4.RELEASE'
