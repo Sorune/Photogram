@@ -1,5 +1,6 @@
 package com.sorune.photogram.Security.JWT;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,7 +49,10 @@ public class JwtFilter extends OncePerRequestFilter {
         String jwt = resolveToken(request);
 
         if(StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            Claims claims = tokenProvider.getClaimsFromToken(jwt);
+            log.info("check token : "+claims);
             Authentication authentication = tokenProvider.getAuthentication(jwt);
+            log.info("authentication : "+authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);

@@ -11,7 +11,7 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "userRoles")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -68,22 +68,21 @@ public class User {
         return new ArrayList<>();
     }
 
-    public UserVO entityToVO(com.sorune.photogram.Security.Entity.User user){
+    public UserVO entityToVO(){
         return UserVO.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .active(user.isActive())
-                .roles(user.getRoles())
-                .name(user.getName())
-                .nickName(user.getNickName())
-                .phone(user.getPhone())
-                .email(user.getEmail())
-                .zoneCode(user.getZoneCode())
-                .roadAddress(user.getRoadAddress())
-                .buildingName(user.getBuildingName())
-                .address(user.getAddress())
-                .instaURL(user.getInstaURL())
+                .id(getId())
+                .username(getUsername())
+                .password(getPassword())
+                .active(isActive())
+                .roles(getRoles())
+                .name(getName())
+                .nickName(getNickName())
+                .zoneCode(getZoneCode())
+                .roadAddress(getRoadAddress())
+                .buildingName(getBuildingName())
+                .address(getAddress())
+                .phone(getPhone())
+                .instaURL(getInstaURL())
                 .build();
     }
 
