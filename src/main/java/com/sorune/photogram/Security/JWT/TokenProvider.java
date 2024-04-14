@@ -5,6 +5,7 @@ import com.sorune.photogram.Security.Entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -67,7 +68,7 @@ public class TokenProvider {
                 .signWith(key)
                 .compact();
 
-        //TokenDTO에 두 토큰을 담아서 반환
+        //TokenVO에 두 토큰을 담아서 반환
         return TokenVO.builder()
                 .tokenType(BEARER_TYPE)
                 .accessToken(accessToken)

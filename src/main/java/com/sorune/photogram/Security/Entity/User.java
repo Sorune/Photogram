@@ -1,5 +1,6 @@
 package com.sorune.photogram.Security.Entity;
 
+import com.sorune.photogram.Security.Domain.UserVO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -65,5 +66,43 @@ public class User {
             return Arrays.asList(this.permissions.split(","));
         }
         return new ArrayList<>();
+    }
+
+    public UserVO entityToVO(com.sorune.photogram.Security.Entity.User user){
+        return UserVO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .active(user.isActive())
+                .roles(user.getRoles())
+                .name(user.getName())
+                .nickName(user.getNickName())
+                .phone(user.getPhone())
+                .email(user.getEmail())
+                .zoneCode(user.getZoneCode())
+                .roadAddress(user.getRoadAddress())
+                .buildingName(user.getBuildingName())
+                .address(user.getAddress())
+                .instaURL(user.getInstaURL())
+                .build();
+    }
+
+    public User voToEntity(UserVO userVO){
+        return User.builder()
+                .id(userVO.getId())
+                .username(userVO.getUsername())
+                .password(userVO.getPassword())
+                .active(userVO.isActive())
+                .roles(userVO.getRoles())
+                .name(userVO.getName())
+                .nickName(userVO.getNickName())
+                .phone(userVO.getPhone())
+                .email(userVO.getEmail())
+                .zoneCode(userVO.getZoneCode())
+                .roadAddress(userVO.getRoadAddress())
+                .buildingName(userVO.getBuildingName())
+                .address(userVO.getAddress())
+                .instaURL(userVO.getInstaURL())
+                .build();
     }
 }

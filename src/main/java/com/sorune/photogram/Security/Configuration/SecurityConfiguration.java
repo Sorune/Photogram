@@ -1,5 +1,6 @@
 package com.sorune.photogram.Security.Configuration;
 
+import com.sorune.photogram.Security.Handler.APILoginSUccessHandler;
 import com.sorune.photogram.Security.JWT.JwtAccessDeniedHandler;
 import com.sorune.photogram.Security.JWT.JwtAuthenticationEntryPoint;
 import com.sorune.photogram.Security.JWT.JwtFilter;
@@ -58,38 +59,35 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests((auth)-> {
-                            AntPathRequestMatcher.antMatcher("/static/**").antMatcher("/");
-                            auth.requestMatchers(URL_TO_PERMIT).permitAll()
-                                    .requestMatchers(AntPathRequestMatcher.antMatcher("/**")).permitAll()
-                                    .anyRequest().authenticated();
-                        }
-                )
-                //커스텀 로그인 처리
-                .formLogin((formLogin)->formLogin.loginPage("/login")
-                        .defaultSuccessUrl("/home")
-                )
-                //로그아웃 처리
-                .logout((logout)->logout.logoutSuccessUrl("/home")
-                        .invalidateHttpSession(true).deleteCookies())
+        http.authorizeHttpRequests((auth)-> {
+                    AntPathRequestMatcher.antMatcher("/static/**").antMatcher("/");
+                    auth.requestMatchers(URL_TO_PERMIT).permitAll()
+                            .requestMatchers(AntPathRequestMatcher.antMatcher("/**")).permitAll()
+                            .anyRequest().authenticated();
+                }
+            )
+            //커스텀 로그인 처리
+            .formLogin((formLogin)->formLogin.loginPage("/login")
+                    .successHandler(new APILoginSUccessHandler())
+                    .defaultSuccessUrl("/home")
+            )
+            //로그아웃 처리
+            .logout((logout)->logout.logoutSuccessUrl("/home")
+                    .invalidateHttpSession(true).deleteCookies())
 
-                .csrf(AbstractHttpConfigurer::disable)//csrf설정 끔
-                .sessionManagement((sessionManagement)->sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//jwt를 사용하는 STATELESS방식이므로 session 사용하지 않는다고 명시
-                //예외처리 핸들러 설정
-                .exceptionHandling((exception)->exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                        .accessDeniedHandler(jwtAccessDeniedHandler)
-                ).anonymous((anonymous) ->
-                        anonymous
-                                .authorities("ROLE_ANONYMOUS") // 익명 사용자에게 부여할 권한
-                );
-/*        http    //OAuth2 인증 정보 추가
-                .oauth2Login(oauth2->oauth2.successHandler(oAuth2SuccessHandler).userInfoEndpoint().userService(oAuth2UserService));*/
-
-        http      //jwt필터를 usernamepassword인증 전에 실행
-                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
-
-
+            .csrf(AbstractHttpConfigurer::disable)//csrf설정 끔
+            .sessionManagement((sessionManagement)->sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//jwt를 사용하는 STATELESS방식이므로 session 사용하지 않는다고 명시
+            //예외처리 핸들러 설정
+            .exceptionHandling((exception)->exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                    .accessDeniedHandler(jwtAccessDeniedHandler)
+            ).anonymous((anonymous) ->
+                    anonymous
+                            .authorities("ROLE_ANONYMOUS") // 익명 사용자에게 부여할 권한
+            );
+        //OAuth2 인증 정보 추가
+/*      http.oauth2Login(oauth2->oauth2.successHandler(oAuth2SuccessHandler).userInfoEndpoint().userService(oAuth2UserService));*/
+        //jwt필터를 usernamepassword인증 전에 실행
+        http.addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         log.info("securityConfig");
         return http.build();
